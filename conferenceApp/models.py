@@ -2,6 +2,8 @@ from django.db import models
 
 from userApp.models import User
 from django.core.validators  import MinLengthValidator, MaxLengthValidator, FileExtensionValidator
+from django.utils.timezone import now
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -33,6 +35,14 @@ class Conference(models.Model):
     
     userSubmissions = models.ManyToManyField(User, through="Submission", related_name='submitted_conferences')
     organizingCommittees = models.ManyToManyField(User, through="OrganizingCommittee", related_name='organized_conferences')
+    
+    def clean(self):
+        if now().date() > self.start_date:
+            raise ValidationError("Start date cannot be in the past.")
+        if self.start_date is None or self.end_date is None:
+            raise ValidationError("Start date and end date cannot be null.")
+        if self.start_date >= self.end_date:
+            raise ValidationError("Start date must be before end date.")
     
 
 class OrganizingCommittee(models.Model):
@@ -73,3 +83,9 @@ class Submission(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def clean(self):
+        if self.conference:
+            if self.conference.start_date < now().date():
+                raise ValidationError("Cannot submit to a conference that has already started.")
+        
