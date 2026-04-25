@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import RegexValidator
 # Create your models here.
 
 class Session (models.Model):
@@ -9,7 +9,10 @@ class Session (models.Model):
     session_date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    room = models.CharField(max_length=10)
+    room = models.CharField(max_length=10, validators=[
+        RegexValidator(regex=r'^[a-zA-Z0-9]+$', 
+                       message='Name must contain only letters and can include spaces')
+    ])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)    
 

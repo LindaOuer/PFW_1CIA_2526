@@ -1,7 +1,7 @@
 from django.db import models
 
 from userApp.models import User
-from django.core.validators  import MinLengthValidator, MaxLengthValidator, FileExtensionValidator
+from django.core.validators  import MinLengthValidator, MaxLengthValidator, FileExtensionValidator, RegexValidator
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
 
@@ -17,7 +17,10 @@ class Conference(models.Model):
     ]
 
     conference_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, validators=[
+        RegexValidator(regex=r'^[a-zA-Z\s]+$', 
+                       message='Name must contain only letters and can include spaces')
+    ])
     location = models.CharField(max_length=200)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -37,10 +40,12 @@ class Conference(models.Model):
     organizingCommittees = models.ManyToManyField(User, through="OrganizingCommittee", related_name='organized_conferences')
     
     def clean(self):
-        if now().date() > self.start_date:
-            raise ValidationError("Start date cannot be in the past.")
         if self.start_date is None or self.end_date is None:
             raise ValidationError("Start date and end date cannot be null.")
+        
+        if now().date() > self.start_date:
+            raise ValidationError("Start date cannot be in the past.")
+
         if self.start_date >= self.end_date:
             raise ValidationError("Start date must be before end date.")
     
@@ -60,7 +65,13 @@ class OrganizingCommittee(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    
+   
+
+def validate_keywords(value):
+    list = [k.strip() for k in value.split(",") if k.strip()]
+    if len(list) > 10:
+        raise ValidationError("A maximum of 10 keywords is allowed.")
+ 
 class Submission(models.Model):
     STATUS_CHOICES = [
         ('Submitted', 'Submitted'),
@@ -80,6 +91,7 @@ class Submission(models.Model):
     submission_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='Submitted')
     payed = models.BooleanField(default=False)
+    keywords = models.CharField(max_length=200)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -88,4 +100,7 @@ class Submission(models.Model):
         if self.conference:
             if self.conference.start_date < now().date():
                 raise ValidationError("Cannot submit to a conference that has already started.")
-        
+        if self.user and self.submission_date:
+            countSubmissions = Submission.objects.filter(user=self.user, submission_date=self.submission_date).count()
+            if countSubmissions > 3:
+                raise ValidationError("A user can submit a maximum of 3 papers per conference.")
