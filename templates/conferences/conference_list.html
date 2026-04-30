@@ -1,3 +1,28 @@
+{% extends 'base.html' %} 
+{% block title %}
+<title>Conference List</title>
+{% endblock %} 
+{% block content %}
+
+{% if message %}
+<div class="alert alert-success" role="alert">
+    {{ message }}
+</div>
+{% endif %}
+
+<h1>List of Conferences</h1>
 {% for c in conferences %}
-    <p>{{ c.name }}</p>
-{% endfor  %}
+<div class="card text-left mb-3">
+    <div class="card-body">
+        <h4 class="card-title">
+            <a href="{% url 'conference_details' c.conference_id %}">
+                {{ c.name }}
+            </a>
+        </h4>
+        <p class="card-text">{{c.description}}</p>
+        <p class="card-text">{{c.start_date}} - {{c.end_date}}</p>
+        <a href="{% url 'conference_delete' c.conference_id %}" class="btn btn-danger">Delete</a>
+    </div>
+</div>
+
+{% endfor %} {% endblock %}

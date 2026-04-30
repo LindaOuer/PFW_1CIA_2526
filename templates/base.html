@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {% block title %}
+        <title>Document</title>
+        {% endblock %}
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <!-- Font Awesome pour icônes -->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+            rel="stylesheet"
+        />
+
+        <!-- Google Fonts : Poppins pour un style moderne -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+        <nav
+            class="navbar sticky-top navbar-expand-lg navbar-light navbar-icon-top"
+            
+        >
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'conference_home' %}"
+                    >Home</a
+                >
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{% url 'conference_list' %}"
+                        >Conferences</a
+                    >
+                </div>
+            </div>
+        </nav>
+        <hr />
+        <!--
+                {# <li><a href="{% url 'conference_list' %}"> Conferences </a></li>
+            </ul>
+        </nav>
+        <hr /> #}
+        -->
+        <div class="container">{% block content %} {% endblock %}</div>
+
+        <!-- Footer personnalisé -->
+        <footer class="text-center mt-auto">
+            <div class="container">
+                <p>&copy; 2026 Ma Conf App - Gestion de Conférences</p>
+                <p>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a> |
+                    <a href="#"><i class="fab fa-github"></i> GitHub</a> |
+                    <a href="#">Contact</a>
+                </p>
+            </div>
+        </footer>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

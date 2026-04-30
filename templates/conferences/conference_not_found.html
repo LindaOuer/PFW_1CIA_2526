@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Conference Not Found</title>
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="danger">Conference Not Found</h1>
+    <p>The conference you are looking for does not exist.</p>
+    <a href="{% url 'conference_list' %}" class="btn btn-outline-secondary">
+        Back to list
+    </a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% block content %}
+<h1>{{ conference.name }}</h1>
+<p><span class="mx-3">Description: </span> {{ conference.description }}</p>
+<p><span class="mx-3">Start Date: </span> {{ conference.start_date }}</p>
+<p><span class="mx-3">End Date: </span> {{ conference.end_date }}</p>
+<p><span class="mx-3">Location: </span> {{ conference.location }}</p>
+
+<a href="{% url 'conference_list' %}" class="btn btn-outline-secondary">
+    Back to list
+</a>
+{% endblock %}
