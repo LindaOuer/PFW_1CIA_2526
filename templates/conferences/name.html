@@ -1,0 +1,8 @@
+<p>{{name}}</p>
+<p>{{pathVar}}</p>
+
+<ul>
+  {% for key, student in students.items %}
+  <li>{{student.name | capfirst }}</li>
+  {% endfor %}
+</ul>
