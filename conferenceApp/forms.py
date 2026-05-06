@@ -4,7 +4,7 @@ from .models import Conference
 class ConferenceFormModel(forms.ModelForm):
     class Meta:
         model = Conference
-        fields = "__all__"
+        fields = ["name", "location", "start_date", "end_date", "description", "theme"]
         widgets = {
             "start_date": forms.DateInput(attrs={"type": "date"}),
             "end_date": forms.DateInput(attrs={"type": "date"}),

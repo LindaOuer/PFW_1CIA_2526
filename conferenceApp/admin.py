@@ -41,8 +41,6 @@ class ConferenceAdmin(admin.ModelAdmin):
             "dates",
             {
                 "fields": (
-                    "created_at",
-                    "updated_at",
                     "start_date",
                     "end_date",
                 )

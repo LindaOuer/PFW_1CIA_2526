@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Committee List</title>
+{% endblock %}
+
+{% block content %} 
+
+<h1>Organizing Committee for {{ conference.name }}</h1>
+
+{% if comittee %}
+    <ul class="list-group">
+        {% for member in comittee %}
+            <li class="list-group-item">
+                {{ member.user.username }} - {{ member.role }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No committee members found.</p>
+{% endif %}
+
+{% endblock %}

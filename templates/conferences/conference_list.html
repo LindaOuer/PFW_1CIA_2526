@@ -1,16 +1,17 @@
-{% extends 'base.html' %} 
-{% block title %}
+{% extends 'base.html' %} {% block title %}
 <title>Conference List</title>
-{% endblock %} 
-{% block content %}
-
-{% if message %}
-<div class="alert alert-success" role="alert">
-    {{ message }}
-</div>
+{% endblock %} {% block content %} {% if message %}
+<div class="alert alert-success" role="alert">{{ message }}</div>
 {% endif %}
 
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{% url 'conference_create' %}" class="btn btn-outline-primary"
+        >Create New Conference</a
+    >
+</div>
+
 <h1>List of Conferences</h1>
+
 {% for c in conferences %}
 <div class="card text-left mb-3">
     <div class="card-body">
@@ -21,7 +22,16 @@
         </h4>
         <p class="card-text">{{c.description}}</p>
         <p class="card-text">{{c.start_date}} - {{c.end_date}}</p>
-        <a href="{% url 'conference_delete' c.conference_id %}" class="btn btn-danger">Delete</a>
+        <a
+            href="{% url 'conference_delete' c.conference_id %}"
+            class="btn btn-outline-danger"
+            >Delete</a
+        >
+        <a
+            href="{% url 'conference_update' c.conference_id %}"
+            class="btn btn-outline-primary"
+            >Update</a
+        >
     </div>
 </div>
 

@@ -1,20 +1,58 @@
+from urllib import request
+
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.views.generic import CreateView, DetailView, ListView, DeleteView
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import CreateView, DetailView, ListView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 
 from .forms import ConferenceFormModel
-from .models import Conference
+from .models import Conference, OrganizingCommittee
+
+
+def conferenceComitteeList(request, conference_id):
+    conference = get_object_or_404(Conference, pk=conference_id)
+    
+    comittee = OrganizingCommittee.objects.filter(conference=conference)
+    # Accessing using queryset filter to get all OrganizingCommittee objects related to the conference
+    # comittee = conference.organized_conferences.all()
+    # Accessing the related OrganizingCommittee objects through the conference's related_name 'committees'
+    
+    return render(request, "conferences/committee_list.html", {"comittee": comittee, "conference": conference})
+
+
+class CommitteeListView(ListView):
+    model = OrganizingCommittee
+    template_name = "conferences/committee_list.html"
+    context_object_name = "comittee"
+    
+    def get_queryset(self):
+        self.conference = get_object_or_404(Conference, pk=self.kwargs['conference_id'])
+        return OrganizingCommittee.objects.filter(conference=self.conference)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['conference'] = self.conference
+        return context
 
 
 class ConferenceCreateView(CreateView):
     model = Conference
-    fields = "__all__"
+    fields = ["name", "location", "start_date", "end_date", "description", "theme"]
+
     # fields = ['name', 'location', 'start_date', 'end_date', 'description', 'theme']
     template_name = "conferences/conference_form.html"
     success_url = reverse_lazy("conference_list")
+    # success_url = '/conferenceApp/conferences/'
     form = ConferenceFormModel
 
+    
+class ConferenceUpdateView(UpdateView):
+    model = Conference
+    fields = ["name", "location", "start_date", "end_date", "description", "theme"]
+    template_name = "conferences/conference_form.html"
+    success_url = reverse_lazy("conference_list")
+    form = ConferenceFormModel
+    
 
 # Create your views here.
 def conference_list(request):

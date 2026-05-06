@@ -25,7 +25,6 @@
     <body class="d-flex flex-column min-vh-100">
         <nav
             class="navbar sticky-top navbar-expand-lg navbar-light navbar-icon-top"
-            
         >
             <div class="container">
                 <a class="navbar-brand" href="{% url 'conference_home' %}"
@@ -36,6 +35,22 @@
                         >Conferences</a
                     >
                 </div>
+                {% if user.is_authenticated %}
+
+                <div class="navbar-nav">
+                    <span><i class="fa fa-user-circle"></i> {{ user.username }}</span>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link nav-link">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </div>
+                {% endif %}
             </div>
         </nav>
         <hr />
