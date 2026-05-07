@@ -23,12 +23,12 @@
         <p class="card-text">{{c.description}}</p>
         <p class="card-text">{{c.start_date}} - {{c.end_date}}</p>
         <a
-            href="{% url 'conference_delete' c.conference_id %}"
+            href="{% if request.user.is_authenticated %}{% url 'conference_delete' c.conference_id %} {% else %}{% url 'login' %}{% endif %}"
             class="btn btn-outline-danger"
             >Delete</a
         >
         <a
-            href="{% url 'conference_update' c.conference_id %}"
+            href="{% if request.user.is_authenticated %}{% url 'conference_update' c.conference_id %}{% endif %}"
             class="btn btn-outline-primary"
             >Update</a
         >

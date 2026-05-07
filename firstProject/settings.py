@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'firstApp',
     'userApp',
     'sessionApp',
@@ -132,3 +134,6 @@ AUTH_USER_MODEL = 'userApp.User'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'conference_list'
 LOGOUT_REDIRECT_URL = 'login'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

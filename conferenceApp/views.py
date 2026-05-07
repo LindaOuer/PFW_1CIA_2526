@@ -4,9 +4,12 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView, DeleteView, UpdateView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 
 from .forms import ConferenceFormModel
 from .models import Conference, OrganizingCommittee
+
 
 
 def conferenceComitteeList(request, conference_id):
@@ -85,7 +88,7 @@ class ConferenceDetailsView(DetailView):
     template_name = "conferences/conference_details.html"
     context_object_name = "conference"
 
-
+@login_required
 def conference_delete(request, pk):
     try:
         conference = Conference.objects.get(conference_id=pk)
@@ -97,11 +100,17 @@ def conference_delete(request, pk):
     return redirect("conference_list", message="Conference deleted successfully")
 
 
-class ConferenceDeleteView(DeleteView):
+class ConferenceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Conference
     template_name = "conferences/conference_confirm_delete.html"
     success_url = reverse_lazy("conference_list")
-
+    
+    def test_func(self):
+          return self.request.user.role == 'committee'
+    #   return self.request.user.role == 'committee' or self.request.user.is_superuser
+    #   return self.request.user.role == 'committee' or self.get_object().created_by == self.request.user
+    def handle_no_permission(self):
+        return render(self.request, '403.html', status=403)
 
 def home(request):
     return render(request, "conferences/home.html")

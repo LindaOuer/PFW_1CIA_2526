@@ -1,3 +1,6 @@
+import random
+from typing import Iterable
+
 from django.db import models
 
 from django.contrib.auth.models import AbstractUser
@@ -30,3 +33,9 @@ class User(AbstractUser):
         ('committee', 'Committee'), 
         ('member', 'Member')], 
     default='participant')
+    
+    def save(self, *args, **kwargs) -> None:
+        if not self.user_id:
+            self.user_id = f"user_{random.randint(1000, 9999)}"
+        
+        return super().save(*args, **kwargs)

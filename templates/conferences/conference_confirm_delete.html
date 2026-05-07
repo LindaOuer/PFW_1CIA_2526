@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Register</h2>
+    <form method="POST" >
+        {% csrf_token %}
+        Confirm deletion of conference: <strong>{{ conference.name }}</strong>
+        <div class="d-grid gap-2 mt-3">
+            <button type="submit" class="btn btn-danger btn-lg">Delete</button>
+            <a href="{% url 'conference_details' conference.pk %}" class="btn btn-secondary btn-lg">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

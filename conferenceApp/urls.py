@@ -1,13 +1,13 @@
 from django.urls import path
 
-from .views import CommitteeListView, conference_delete, conference_details, name, home, conference_list, ConferenceListView,  ConferenceCreateView, ConferenceUpdateView, conferenceComitteeList
+from .views import CommitteeListView, ConferenceDeleteView, conference_delete, conference_details, name, home, conference_list, ConferenceListView,  ConferenceCreateView, ConferenceUpdateView, conferenceComitteeList
 
 urlpatterns = [
     path("", home, name="conference_home"),
     path("name/<str:n>", name, name="conference_name"),
     path("list/", conference_list, name="conference_list"),
     path("details/<int:pk>/", conference_details, name="conference_details"),
-    path("delete/<int:pk>/", conference_delete, name="conference_delete"),
+    path("delete/<int:pk>/", ConferenceDeleteView.as_view(), name="conference_delete"),
     path("listview/", ConferenceListView.as_view(), name="conference_listview"),
     path('create/', ConferenceCreateView.as_view(), name='conference_create'),
     path('update/<int:pk>/', ConferenceUpdateView.as_view(), name='conference_update'),
