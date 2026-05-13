@@ -97,10 +97,21 @@ class Submission(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def clean(self):
-        if self.conference:
-            if self.conference.start_date < now().date():
+        try:
+            conference = self.conference
+        except Exception:
+            conference = None
+
+        if conference:
+            if conference.start_date < now().date():
                 raise ValidationError("Cannot submit to a conference that has already started.")
-        if self.user and self.submission_date:
-            countSubmissions = Submission.objects.filter(user=self.user, submission_date=self.submission_date).count()
+
+        try:
+            user = self.user
+        except Exception:
+            user = None
+
+        if user and self.submission_date:
+            countSubmissions = Submission.objects.filter(user=user, submission_date=self.submission_date).count()
             if countSubmissions > 3:
                 raise ValidationError("A user can submit a maximum of 3 papers per conference.")

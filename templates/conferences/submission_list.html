@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>My Submissions</h1>
+    <table class="table table-striped table-bordered container mt-5 ">
+        <thead>
+            <tr>
+                <th>Conference</th>
+                <th>Title</th>
+                <th>Abstract</th>
+                <th>Paper</th>
+                <th>Submission Date</th>
+                <th>Status</th>
+                <th>Payed</th>
+                <th>Keywords</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.conference.name }}</td>
+                <td>{{ submission.title }}</td>
+                <td>{{ submission.abstract }}</td>
+                <td>
+                    {% if submission.paper %}
+                        <a href="{{ submission.paper.url }}" target="_blank" rel="noopener noreferrer">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            {{ submission.paper.name|cut:"papers/" }}
+                        </a>
+                    {% else %}
+                        <span class="text-muted">No file</span>
+                    {% endif %}
+                </td>
+                <td>{{ submission.submission_date }}</td>
+                <td>{{ submission.status }}</td>
+                <td>{{ submission.payed }}</td>
+                <td>{{ submission.keywords }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

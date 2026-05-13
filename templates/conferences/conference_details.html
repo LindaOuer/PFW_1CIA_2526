@@ -8,4 +8,10 @@
 <a href="{% url 'conference_list' %}" class="btn btn-outline-secondary">
     Back to list
 </a>
+
+{% if user.is_authenticated %}
+<a href="{% url 'submission_register' conference.conference_id %}" class="btn btn-primary">
+    Submit a paper
+</a>
+{% endif %}
 {% endblock %}

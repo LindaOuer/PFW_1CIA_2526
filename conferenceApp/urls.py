@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import CommitteeListView, ConferenceDeleteView, conference_delete, conference_details, name, home, conference_list, ConferenceListView,  ConferenceCreateView, ConferenceUpdateView, conferenceComitteeList
+from .views import CommitteeListView, ConferenceDeleteView, conference_delete, conference_details, name, home, conference_list, ConferenceListView,  ConferenceCreateView, ConferenceUpdateView, conferenceComitteeList, submissionRegister, SubmissionCreateView, SubmissionListView
 
 urlpatterns = [
     path("", home, name="conference_home"),
@@ -13,4 +13,7 @@ urlpatterns = [
     path('update/<int:pk>/', ConferenceUpdateView.as_view(), name='conference_update'),
     path('committees/<int:conference_id>/', conferenceComitteeList, name='conference_committees_list'),
     path('committees/<int:conference_id>/list/', CommitteeListView.as_view(), name='conference_committees_listview'),
+    path('conferences/<int:conference_id>/submit/', submissionRegister, name='submission_register'),
+    path('conferences/<int:conference_id>/submitview/', SubmissionCreateView.as_view(), name='submission_createview'),
+    path('conferences/Mysubmissions/', SubmissionListView.as_view(), name='submission_listview'),
 ]

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Conference
+from .models import Conference, Submission
 
 class ConferenceFormModel(forms.ModelForm):
     class Meta:
@@ -17,3 +17,11 @@ class ConferenceForm(forms.Form):
     end_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
     description = forms.CharField(widget=forms.Textarea)
     theme = forms.ChoiceField(choices=Conference.THEME_CHOICES)
+    
+class SubmissionFormModel(forms.ModelForm):
+    class Meta:
+        model = Submission
+        fields = ["title", "abstract", "paper", "keywords"]
+        widgets = {
+            "keywords": forms.TextInput(attrs={"placeholder": "Enter keywords separated by commas"}),
+        }
